@@ -25,7 +25,7 @@ func main() {
 
 	// register the home function as the handler for the "/" URL pattern
 	// "/" is a catch-all regardless of their URL path
-	mux.HandleFunc("/", home)
+	mux.HandleFunc("/{$}", home)
 	mux.HandleFunc("/snippet/view", snippetView)
 	mux.HandleFunc("/snippet/create", snippetCreate)
 
