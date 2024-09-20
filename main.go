@@ -8,7 +8,15 @@ import (
 // Define a home handler function
 func home(w http.ResponseWriter, r *http.Request) {
 	// Write a byte slice  as the response body
-	w.Write([]byte("Hello from snippetbox"))
+	w.Write([]byte("Display the home page"))
+}
+
+func snippetView(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Dsiplay a specific snippet"))
+}
+
+func snippetCreate(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("Display a form for creating a new snippet"))
 }
 
 func main() {
@@ -18,6 +26,8 @@ func main() {
 	// register the home function as the handler for the "/" URL pattern
 	// "/" is a catch-all regardless of their URL path
 	mux.HandleFunc("/", home)
+	mux.HandleFunc("/snippet/view", snippetView)
+	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	log.Print("starting server on :4000")
 
