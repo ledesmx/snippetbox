@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 // Define a home handler function
@@ -12,7 +14,15 @@ func home(w http.ResponseWriter, r *http.Request) {
 }
 
 func snippetView(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("Dsiplay a specific snippet"))
+	id_string := r.PathValue("id")
+	id, err := strconv.Atoi(id_string)
+	if err != nil || id <= 0 {
+		http.NotFound(w, r)
+		return
+	}
+
+	msg := fmt.Sprintf("Display snippet for ID %d", id)
+	w.Write([]byte(msg))
 }
 
 func snippetCreate(w http.ResponseWriter, r *http.Request) {
@@ -26,7 +36,7 @@ func main() {
 	// register the home function as the handler for the "/" URL pattern
 	// "/" is a catch-all regardless of their URL path
 	mux.HandleFunc("/{$}", home)
-	mux.HandleFunc("/snippet/view", snippetView)
+	mux.HandleFunc("/snippet/view/{id}", snippetView)
 	mux.HandleFunc("/snippet/create", snippetCreate)
 
 	log.Print("starting server on :4000")
