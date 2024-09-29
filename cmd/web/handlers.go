@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"html/template"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -10,8 +12,21 @@ import (
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go")
 
+	template, err := template.ParseFiles("./ui/html/pages/home.tmpl.html")
+	if err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
+	if err := template.Execute(w, nil); err != nil {
+		log.Println(err.Error())
+		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
+
 	// Write a byte slice  as the response body
-	fmt.Fprint(w, "Display the home page")
+	// fmt.Fprint(w, "Display the home page")
 }
 
 func snippetView(w http.ResponseWriter, r *http.Request) {
