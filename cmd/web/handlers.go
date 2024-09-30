@@ -12,14 +12,14 @@ import (
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go")
 
-	template, err := template.ParseFiles("./ui/html/pages/home.tmpl.html")
+	templates, err := template.ParseFiles("./ui/html/pages/home.tmpl.html", "./ui/html/base.tmpl.html")
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
 
-	if err := template.Execute(w, nil); err != nil {
+	if err := templates.ExecuteTemplate(w, "base", nil); err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
