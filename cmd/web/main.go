@@ -9,6 +9,10 @@ func main() {
 	// Initialize a new servemux or router
 	mux := http.NewServeMux()
 
+	fileHandler := http.FileServer(http.Dir("./ui/static/"))
+
+	mux.Handle("GET /css/", http.StripPrefix("/css", fileHandler))
+
 	// register the home function as the handler for the "/" URL pattern
 	// "/" is a catch-all regardless of their URL path
 	mux.HandleFunc("GET /{$}", home)
