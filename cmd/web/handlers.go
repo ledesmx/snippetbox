@@ -12,7 +12,13 @@ import (
 func home(w http.ResponseWriter, r *http.Request) {
 	w.Header().Add("Server", "Go")
 
-	templates, err := template.ParseFiles("./ui/html/pages/home.tmpl.html", "./ui/html/base.tmpl.html")
+	files := []string{
+		"./ui/html/pages/home.tmpl.html",
+		"./ui/html/base.tmpl.html",
+		"./ui/html/partials/nav.tmpl.html",
+	}
+
+	templates, err := template.ParseFiles(files...)
 	if err != nil {
 		log.Println(err.Error())
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
@@ -24,9 +30,6 @@ func home(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
 	}
-
-	// Write a byte slice  as the response body
-	// fmt.Fprint(w, "Display the home page")
 }
 
 func snippetView(w http.ResponseWriter, r *http.Request) {
