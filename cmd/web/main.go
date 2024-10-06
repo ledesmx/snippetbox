@@ -7,12 +7,18 @@ import (
 	"os"
 )
 
+type Application struct {
+	logger *slog.Logger
+}
+
 func main() {
 	// Define a new command-line flag
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	flag.Parse()
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
+	app := &Application{
+		logger: slog.New(slog.NewTextHandler(os.Stdout, nil)),
+	}
 
 	// Initialize a new servemux or router
 	mux := http.NewServeMux()
@@ -23,16 +29,16 @@ func main() {
 
 	// register the home function as the handler for the "/" URL pattern
 	// "/" is a catch-all regardless of their URL path
-	mux.HandleFunc("GET /{$}", home)
-	mux.HandleFunc("GET /snippet/view/{id}", snippetView)
-	mux.HandleFunc("GET /snippet/create", snippetCreate)
-	mux.HandleFunc("POST /snippet/create", snippetCreatePost)
+	mux.HandleFunc("GET /{$}", app.home)
+	mux.HandleFunc("GET /snippet/view/{id}", app.snippetView)
+	mux.HandleFunc("GET /snippet/create", app.snippetCreate)
+	mux.HandleFunc("POST /snippet/create", app.snippetCreatePost)
 
-	logger.Info("starting server", slog.String("addr", *addr))
+	app.logger.Info("starting server", slog.String("addr", *addr))
 
 	// start a new web server with ListenAndServe
 	err := http.ListenAndServe(*addr, mux)
 	// it returns an error that is always non-nil
-	logger.Error(err.Error())
+	app.logger.Error(err.Error())
 	os.Exit(1)
 }
