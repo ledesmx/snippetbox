@@ -2,15 +2,17 @@ package main
 
 import (
 	"flag"
-	"log"
+	"log/slog"
 	"net/http"
+	"os"
 )
 
 func main() {
 	// Define a new command-line flag
 	addr := flag.String("addr", ":4000", "HTTP network address")
-
 	flag.Parse()
+
+	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 
 	// Initialize a new servemux or router
 	mux := http.NewServeMux()
@@ -26,10 +28,11 @@ func main() {
 	mux.HandleFunc("GET /snippet/create", snippetCreate)
 	mux.HandleFunc("POST /snippet/create", snippetCreatePost)
 
-	log.Printf("starting server on %s", *addr)
+	logger.Info("starting server", slog.String("addr", *addr))
 
 	// start a new web server with ListenAndServe
 	err := http.ListenAndServe(*addr, mux)
 	// it returns an error that is always non-nil
-	log.Fatal(err)
+	logger.Error(err.Error())
+	os.Exit(1)
 }
