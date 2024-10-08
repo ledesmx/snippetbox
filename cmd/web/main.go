@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-type Application struct {
+type application struct {
 	logger *slog.Logger
 }
 
@@ -16,7 +16,7 @@ func main() {
 	addr := flag.String("addr", ":4000", "HTTP network address")
 	flag.Parse()
 
-	app := &Application{
+	app := &application{
 		logger: slog.New(slog.NewTextHandler(os.Stdout, nil)),
 	}
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func (app *Application) serverError(w http.ResponseWriter, r *http.Request, err error) {
+func (app *application) serverError(w http.ResponseWriter, r *http.Request, err error) {
 	var (
 		method = r.Method
 		uri    = r.URL.RequestURI()
@@ -23,7 +23,7 @@ func (app *Application) serverError(w http.ResponseWriter, r *http.Request, err 
 	)
 }
 
-func (app *Application) clientError(w http.ResponseWriter, code int) {
+func (app *application) clientError(w http.ResponseWriter, code int) {
 	http.Error(
 		w,
 		http.StatusText(code),
