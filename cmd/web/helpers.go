@@ -22,3 +22,11 @@ func (app *Application) serverError(w http.ResponseWriter, r *http.Request, err 
 		http.StatusInternalServerError,
 	)
 }
+
+func (app *Application) clientError(w http.ResponseWriter, code int) {
+	http.Error(
+		w,
+		http.StatusText(code),
+		code,
+	)
+}
